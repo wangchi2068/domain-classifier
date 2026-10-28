@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from apps.models.CommonModels import ApiResult
 from apps.models.DomainModels import (
@@ -19,12 +19,14 @@ async def predict_single_ten_domain(item: ProjectItem):
     输入单项目的【项目名称】与【建设规模和内容】，
     基于 DNN 深度学习模型，预测其所属的浙江省重大项目十大领域与二级细分类别。
     """
-    if not item.name.strip() and not item.content.strip():
-        raise HTTPException(status_code=400, detail="项目名称和建设内容不能同时为空！")
+    name = (item.name or "").strip()
+    content = (item.content or "").strip()
+    if not name and not content:
+        return ApiResult.fail(code=400, msg="项目名称和建设内容不能同时为空！")
 
     try:
         service = get_ten_domain_service()
-        res = service.predict_one(item.name, item.content)
+        res = service.predict_one(name, content)
         return ApiResult.success(res)
     except Exception as e:
         return ApiResult.fail(code=500, msg=f"十大领域模型推断异常: {str(e)}")

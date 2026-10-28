@@ -56,11 +56,17 @@ class NewDomainService:
 
         app_config = get_app_config()
         base_model_dir = app_config.get("model_dir", "./model_dir")
+        if not os.path.isabs(base_model_dir):
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            base_model_dir = os.path.join(project_root, base_model_dir)
+
         new_dir = os.path.join(base_model_dir, "new_domain")
         bge_path = app_config.get(
             "bge_model_path",
             r"D:/trae/实体识别/embedding_cache_pkg/models--BAAI--bge-small-zh/snapshots/1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
         )
+        if not os.path.exists(bge_path):
+            bge_path = "BAAI/bge-small-zh"
 
         # 1. 类别元数据
         classes_json_path = os.path.join(new_dir, "classes.json")

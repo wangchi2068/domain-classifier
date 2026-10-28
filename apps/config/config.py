@@ -1,6 +1,6 @@
 import os
 import yaml
-from apps import singleton
+from apps import singleton, BS_PROFILE_NAME
 
 
 @singleton
@@ -19,7 +19,6 @@ def init_config(profile: str):
     cur_path = os.path.dirname(os.path.realpath(__file__))
     yaml_path = os.path.join(cur_path, f"application-{profile}.yml")
     if not os.path.exists(yaml_path):
-        # 兼容未指定环境时默认 dev
         yaml_path = os.path.join(cur_path, "application-dev.yml")
     with open(yaml_path, encoding="UTF-8") as fs:
         configs = yaml.safe_load(fs)
@@ -29,5 +28,6 @@ def init_config(profile: str):
 def get_app_config() -> AppConfig:
     global APP_CONFIG
     if APP_CONFIG is None:
-        init_config("dev")
+        profile = os.getenv(BS_PROFILE_NAME, "dev")
+        init_config(profile)
     return APP_CONFIG
