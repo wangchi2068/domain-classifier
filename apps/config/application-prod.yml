@@ -1,0 +1,8 @@
+server:
+  host: 0.0.0.0
+  port: 8000
+  context_path: /domain-api
+  openapi: false
+
+model_dir: ./model_dir
+bge_model_path: D:/trae/实体识别/embedding_cache_pkg/models--BAAI--bge-small-zh/snapshots/1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8
