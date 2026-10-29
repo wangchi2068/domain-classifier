@@ -61,11 +61,16 @@ class NewDomainService:
             base_model_dir = os.path.join(project_root, base_model_dir)
 
         new_dir = os.path.join(base_model_dir, "new_domain")
+        local_bge = os.path.join(base_model_dir, "bge-small-zh")
         bge_path = app_config.get(
             "bge_model_path",
             r"D:/trae/实体识别/embedding_cache_pkg/models--BAAI--bge-small-zh/snapshots/1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
         )
-        if not os.path.exists(bge_path):
+        if os.path.exists(local_bge):
+            bge_path = local_bge
+        elif not os.path.exists(bge_path):
+            if "HF_ENDPOINT" not in os.environ:
+                os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
             bge_path = "BAAI/bge-small-zh"
 
         # 1. 类别元数据

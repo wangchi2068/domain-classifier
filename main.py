@@ -10,6 +10,10 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
+# 默认启用国内高速镜像源下载开源模型，防止网络超时
+if "HF_ENDPOINT" not in os.environ:
+    os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, CURRENT_DIR)
 
